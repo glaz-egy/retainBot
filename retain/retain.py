@@ -9,6 +9,7 @@ HadoList = ['不遜なる狂気の器', '爬行する鉄の王女', '結合せ�
 
 UserUBWList = ['体は剣で出来ている', '幾たびの戦場を越えて不敗', 'ただ一度の勝利もなし', '剣の丘で鉄を鍛つ', 'この体は']
 UBWList = ['血潮は鉄で心は硝子', 'ただ一度の敗走もなく、', '担い手はここに独り', 'ならば我が生涯に意味は不要ず', '無限の剣で出来ていた']
+
 GreetingDict = {'mooning': [4, 5, 6, 7, 8, 9],
                 'noon': [10, 11, 12, 13, 14, 15, 16, 17, 18],
                 'night': [19, 20, 21, 22, 23, 24, 0, 1, 2, 3]}
@@ -28,7 +29,7 @@ class Bot:
             self.HadoFlag = True
             comment = HadoList[self.HadoIndex]
             self.HadoIndex += 1
-            if self.HadoIndex > 4:
+            if self.HadoIndex >= len(HadoList):
                 self.HadoFlag = False
                 self.HadoIndex = 0
         elif text == UserUBWList[self.UBWIndex] and not self.HadoFlag:
@@ -59,7 +60,4 @@ class Bot:
                 comment = 'こんばんわ！'
         elif 'こんにち' in text:
             comment = 'こんにちは！'
-        elif text in UserhadoList:
-            self.HadoFlag = True
-            comment = HadoList[self.HadoIndex]
         return comment
