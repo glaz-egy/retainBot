@@ -8,7 +8,7 @@ class Spell:
         try:
             self.SpellDic = self.LoadSpell(FileName=self.SpellFile)
         except FileNotFoundError:
-            self.SpellDic = {}
+            self.SpellDic = {'SpellList':{}}
             self.SaveSpell(self.SpellDic, FileName=self.SpellFile)
 
     def AddSpell(self, SpellData, SpellName):
@@ -16,9 +16,20 @@ class Spell:
             return -1
         else:
             self.SpellDic[SpellName] = SpellData
-            self.SpellDic['SpellList'] = {SpellData[0]: SpellName}
+            self.SpellDic['SpellList'][SpellData[0]] = SpellName
             self.SaveSpell(self.SpellDic, FileName=self.SpellFile)
     
+    def DelSpell(self, SpellName):
+        if not SpellName in self.SpellDic.keys():
+            return -1
+        else:
+            SpellData = self.SpellDic[SpellName][0]
+            del self.SpellDic[SpellName]
+            print(SpellData)
+            print(self.SpellDic['SpellList'])
+            del self.SpellDic['SpellList'][SpellData]
+            self.SaveSpell(self.SpellDic, FileName=self.SpellFile)
+
     def CallSpell(self, SpellName, Index):
         return self.SpellDic[SpellName][Index]
 
