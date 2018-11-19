@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+from . import spell
 import sys
 import os
 
@@ -16,33 +17,34 @@ GreetingDict = {'mooning': [4, 5, 6, 7, 8, 9],
 TimeZone = datetime.timezone(datetime.timedelta(hours=+9), 'JST')
 
 class Bot:
-    def __init__(self):
+    def __init__(self, spell):
         self.__version__ = 'interabot version: 0.0.3\nCopyright (c) 2018 Glaz egy.'
-        self.HadoFlag = False
-        self.HadoIndex = 0
-        self.UBWFlag = False
-        self.UBWIndex = 0
+        self.Spell = spell
+        self.SpellingFlag = False
+        self.SpellName = None
+        self.SpellIndex = 1
+    
+    def AddSpell(self, SpellData, SpellName):
+        return self.Spell.AddSpell(SpellData, SpellName)
 
     def Response(self, text):
         comment = None
-        if text == UserhadoList[self.HadoIndex] and not self.UBWFlag:
-            self.HadoFlag = True
-            comment = HadoList[self.HadoIndex]
-            self.HadoIndex += 1
-            if self.HadoIndex >= len(HadoList):
-                self.HadoFlag = False
-                self.HadoIndex = 0
-        elif text == UserUBWList[self.UBWIndex] and not self.HadoFlag:
-            self.UBWFlag = True
-            comment = UBWList[self.UBWIndex]
-            self.UBWIndex += 1
-            if self.UBWIndex >= len(UBWList):
-                self.UBWFlag = False
-                self.UBWIndex = 0
-        elif self.UBWFlag:
-            comment = '固有結界が途中で止っちゃうよ'
-        elif self.HadoFlag:
-            comment = '今詠唱中だよ？　どうしたの'
+        if text in self.Spell.SpellDic['SpellList'].keys():
+            self.SpellingFlag = True
+            self.SpellName = self.Spell.SpellDic['SpellList'][text]
+            comment = self.Spell.CallSpell(self.SpellName, self.SpellIndex)
+            self.SpellIndex += 2
+        elif self.SpellingFlag:
+            if text == self.Spell.SpellDic[self.SpellName][self.SpellIndex-1]:
+                comment = self.Spell.CallSpell(self.SpellName, self.SpellIndex)
+                if self.SpellIndex+1 == len(self.Spell.SpellDic[self.SpellName]) or self.SpellIndex+2 == self.Spell.SpellDic[self.SpellName]:
+                    self.SpellingFlag = False
+                    self.SpellName = None
+                    self.SpellIndex = 1
+                else:
+                    self.SpellIndex += 2
+            else:
+                comment = '今詠唱中だよ？　どうしたの'
         elif '今何時' in text:
             now = datetime.datetime.now(TimeZone)
             comment = '{}:{:02}だよ！'.format(now.hour, now.minute)
