@@ -37,7 +37,7 @@ class Bot:
         elif self.SpellingFlag:
             if text == self.Spell.SpellDic[self.SpellName][self.SpellIndex-1]:
                 comment = self.Spell.CallSpell(self.SpellName, self.SpellIndex)
-                if self.SpellIndex+1 == len(self.Spell.SpellDic[self.SpellName]) or self.SpellIndex+2 == self.Spell.SpellDic[self.SpellName]:
+                if self.SpellIndex+1 == len(self.Spell.SpellDic[self.SpellName]) or self.SpellIndex+2 == len(self.Spell.SpellDic[self.SpellName]):
                     self.SpellingFlag = False
                     self.SpellName = None
                     self.SpellIndex = 1
