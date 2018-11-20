@@ -2,3 +2,4 @@
 
 from . import retain
 from . import spell
+from . import study
