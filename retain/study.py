@@ -22,26 +22,26 @@ class Study:
         self.SaveStudy(self.StudyDic, filename=self.StudyFile)
 
     def DelStudy(self, DelObj, delkey):
+        FindFlag = False
         if delkey == 'Ques':
-            try:
-                for Subject in self.StudyDic.keys():
-                    for Unit in Subject.keys():
+            for Subject in self.StudyDic.keys():
+                for Unit in Subject.keys():
+                    if DelObj in self.StudyDic[Subject][Unit].keys():
                         del self.StudyDic[Subject][Unit][DelObj]
-            except:
-                return -1
+                        FindFlag = True
+            if not FindFlag: return -1
         elif delkey == 'Unit':
-            try:
-                for Subject in self.StudyDic.keys():
+            for Subject in self.StudyDic.keys():
+                if DelObj in self.StudyDic[Subject].keys():
                     del self.StudyDic[Subject][DelObj]
-            except:
-                return -2
+                    FindFlag = True
+            if not FindFlag: return -2
         elif delkey == 'Subject':
-            try:
-                del self.StudyDic[DelObj]
-            except:
-                return -3
+            if DelObj in self.StudyDic.keys(): del self.StudyDic[DelObj]
+            else: return -3
         else: return -4
         self.SaveStudy(self.StudyDic, filename=self.StudyFile)
+        return 0
     
     def LoadStudy(self, filename='StudyMain.sf'):
         with open(filename, 'rb') as f:
