@@ -24,20 +24,18 @@ class Study:
     def DelStudy(self, DelObj, delkey):
         FindFlag = False
         if delkey == 'Ques':
-            for Subject in self.StudyDic.keys():
-                for Unit in Subject.keys():
-                    if DelObj in self.StudyDic[Subject][Unit].keys():
-                        del self.StudyDic[Subject][Unit][DelObj]
-                        FindFlag = True
+            if DelObj[2] in self.StudyDic[DelObj[0]][DelObj[1]]:
+                del self.StudyDic[DelObj[0]][DelObj[1]][DelObj[2]]
+                FindFlag = True
             if not FindFlag: return -1
         elif delkey == 'Unit':
             for Subject in self.StudyDic.keys():
-                if DelObj in self.StudyDic[Subject].keys():
+                if DelObj in self.StudyDic[Subject]:
                     del self.StudyDic[Subject][DelObj]
                     FindFlag = True
             if not FindFlag: return -2
         elif delkey == 'Subject':
-            if DelObj in self.StudyDic.keys(): del self.StudyDic[DelObj]
+            if DelObj in self.StudyDic: del self.StudyDic[DelObj]
             else: return -3
         else: return -4
         self.SaveStudy(self.StudyDic, filename=self.StudyFile)
